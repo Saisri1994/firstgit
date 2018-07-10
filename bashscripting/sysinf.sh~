@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+#sym= free -m| grep Mem | awk '{print $2}'
+
+#echo "print the memory size 1st partition is $sym"
+
+
+
+echo "enter the  $ROOTPART"
+
