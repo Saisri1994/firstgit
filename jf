@@ -1,0 +1,94 @@
+pipeline{
+    
+    agent any
+    
+    stages{
+
+        stage('checkout')
+        {
+            steps{
+               
+               checkout([$class: 'SubversionSCM', additionalCredentials: [], 
+               excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', 
+               excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, 
+               includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, 
+               credentialsId: 'f1717048-5ebd-4211-b2d0-8ce842208935', depthOption: 'infinity', 
+               ignoreExternalsOption: true, local: '.', 
+               remote: 'https://sai.com/']], 
+               quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+
+            }
+        }
+
+        stage('ant')
+        {
+            steps{
+                withAnt(installation: 'Ant', jdk: 'JDK') {
+                    sh "ant -version"
+                    sh "java -version"
+                    sh "/opt/ant/apache-ant-1.10.5/bin/ant init compile war"
+                }
+            }
+        }
+
+        stage('publish')
+        {
+            steps{
+               nexusPublisher nexusInstanceId: 'EBF7C49E-D44F479A-F9878BE2-FD1E8B60-19C09D78', 
+               nexusRepositoryId: 'ICapture', 
+               packages: [[$class: 'MavenPackage', 
+               mavenAssetList: [[classifier: '', extension: '', 
+               filePath: 'target/ca-adaptor.war']], 
+               mavenCoordinate: [artifactId: 'ICaptureCA_source', 
+               groupId: 'org.icici', packaging: 'war', version: '$BUILD_NUMBER']]]
+            }
+        }
+    }
+
+    post{
+        
+        failure {
+            
+            steps{
+                
+                script{
+                    echo 'Connecting to JIRA'
+                    withEnv(['JIRA_SITE=JIRA'])
+                    def issue = [fields: [ project: [id: 10207],
+                                summary: 'Jenkins Build Result- $PROJECT_NAME # $BUILD_NUMBER',
+                                description: 'This is the $BUILD_STATUS',
+                                issueType: [id: 448]]]
+                    newIssue = jiraNewIssue issue: issue
+                        echo newIssue.successful.toString()
+                        echo newIssue.data.toString()
+                }
+                
+                script{
+                    currentBuild.result = 'FAILURE'
+                    //def mailRecipients = "ss@gmail.com"
+                    emailext attachLog: true, body: 'Check console output at $BUILD_URL to view the results.', 
+                    compressLog: true, mimeType: 'HTML (text/html)', 
+                    recipientProviders: [culprits(), developers(), requestor()], 
+                    replyTo: 'op_mbst@icicibank.com', 
+                    subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', 
+                    to: 'm'
+                }
+
+            }
+         
+        }
+
+        success {
+            script{
+                currentBuild.result = 'SUCCESS'
+                //def mailRecipients = "rohit.gambhir@icicibank.com,kedar.datar@ext.icicibank.com,singh.ashish@icicibank.com,atul.pandey@icicibank.com"
+                emailext attachLog: true, body: 'Check console output at $BUILD_URL to view the results.', 
+                compressLog: true, mimeType: 'HTML (text/html)', 
+                recipientProviders: [culprits(), developers(), requestor()], 
+                replyTo: 'op_mbst@icicibank.com', 
+                subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', 
+                to: 'saisrik1994@gmail.com,'
+            }
+        }
+    }
+}
