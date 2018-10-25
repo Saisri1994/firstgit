@@ -1,0 +1,90 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<project xmlns:sonar="antlib:org.sonar.ant" name="CAAdaptor" default="war" basedir=".">
+<script/>
+<script/>
+<!-- The library containing external jar dependencies -->
+<path id="compile.classpath">
+<fileset dir="WebContent/WEB-INF/lib">
+<include name="*.jar"/>
+</fileset>
+<fileset dir="WebContent/WEB-INF/lib">...</fileset>
+</path>
+<path id="compile.classpath">...</path>
+<!--
+This step clean previous compilations and binaries for fresh compilation & builds
+-->
+<!--...-->
+<!--
+target name="clean"> <delete dir="WebContent/WEB-INF/classes/build"/> <delete dir="dist"/> </target
+-->
+<!--...-->
+<!--
+This creates our compiled code and war file destination directory
+-->
+<!--...-->
+<target name="init">
+<mkdir dir="build"/>
+<mkdir dir="target"/>
+</target>
+<target name="init">...</target>
+<!--
+This compile stage compiles our java source code and generates .class files which would then run on JVM
+-->
+<!--...-->
+<target name="compile" depends="init">
+<javac destdir="build" debug="true" srcdir="src" includeantruntime="false" encoding="iso-8859-1">
+<classpath refid="compile.classpath"/>
+</javac>
+<javac destdir="build" debug="true" srcdir="src" includeantruntime="false" encoding="iso-8859-1">...</javac>
+</target>
+<target name="compile" depends="init">...</target>
+<!--
+Define the SonarQube global properties (the most usual way is to pass these properties via the command line)
+-->
+<!--...-->
+<property name="sonar.host.url" value="http://10.78.10.92:9500"/>
+<!-- Define the Sonar properties -->
+<property name="sonar.projectKey" value="adaptor"/>
+<property name="sonar.projectName" value="ca-adp"/>
+<property name="sonar.projectVersion" value="1.0"/>
+<property name="sonar.language" value="java"/>
+<property name="sonar.sources" value="src"/>
+<!--
+property name="sonar.binaries" value="build/classes" /
+-->
+<!--...-->
+<property name="sonar.java.binaries" value="build"/>
+<property name="sonar.sourceEncoding" value="iso-8859-1"/>
+<!-- End of sonar properties definition -->
+<!--
+========= Define SonarQube Scanner for Ant Target =========
+-->
+<!--...-->
+<target name="sonar" depends="compile">
+<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+<!--
+Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder
+-->
+<!--...-->
+<classpath path="/opt/ant/apache-ant-1.10.5/lib/sonarqube-ant-task-2.5.jar"/>
+</taskdef>
+<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">...</taskdef>
+<!-- Execute SonarQube Scanner for Ant Analysis -->
+<sonar:sonar/>
+</target>
+<target name="sonar" depends="compile">...</target>
+<!--
+Final step, and this compiles all our code and pacakges into a war package
+-->
+<!--...-->
+<target name="war" depends="compile">
+<war destfile="target/ca-adaptor.war" webxml="WebContent/WEB-INF/web.xml">
+<fileset dir="WebContent"/>
+<lib dir="WebContent/WEB-INF/lib"/>
+<classes dir="build"/>
+</war>
+<war destfile="target/ca-adaptor.war" webxml="WebContent/WEB-INF/web.xml">...</war>
+</target>
+<target name="war" depends="compile">...</target>
+</project>
+<project xmlns:sonar="antlib:org.sonar.ant" name="CAAdaptor" default="war" basedir=".">...</project>
