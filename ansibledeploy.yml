@@ -49,7 +49,7 @@
   - name: Link latest vprofile version
     file: 
        src:/var/lib/tomcat/webapps/{{time}}-{{build}} 
-       dest:/var/lib/tomcat/webapps/VProfile state:link
+       dest:/var/lib/tomcat/webapps/wardir state:link
 
   - name: Stop iptables
     service: 
