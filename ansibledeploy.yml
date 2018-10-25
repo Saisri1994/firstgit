@@ -36,7 +36,7 @@
 
   - name: Delete link to existing vprofile version
     file: 
-       path:/var/lib/tomcat/webapps/War 
+       path:/var/lib/tomcat/webapps/Wardir
        state:absent
 
   - name: Start tomcat service
