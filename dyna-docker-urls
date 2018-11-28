@@ -1,0 +1,9 @@
+https://github.com/jenkinsci/docker-jnlp-slave/blob/master/jenkins-slave
+https://github.com/jenkinsci/docker-slave
+https://github.com/eea/eea.docker.jenkins.slave
+https://github.com/jenkinsci/docker-plugin
+https://github.com/sabre1041/ose-jenkins-cluster/blob/master/jenkins-slave/Dockerfile
+https://github.com/tehranian/dind-jenkins-slave/blob/master/Dockerfile
+https://github.com/rprakashg/blog/blob/master/content/posts/jenkins-build-slave-as-container.md
+https://www.bouvet.no/bouvet-deler/utbrudd/containerize-your-jenkins-tests-with-docker
+https://www.cloudbees.com/blog/demand-jenkins-slaves-kubernetes-and-google-container-engine
