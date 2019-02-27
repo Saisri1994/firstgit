@@ -1,0 +1,6 @@
+#!/bin/bash
+cp %workspace%/job/target/jenk.war svnfolderpath
+svn --username 
+svn --password
+svn add warname
+svn commit -m fileame
