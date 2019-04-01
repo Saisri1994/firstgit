@@ -1,0 +1,32 @@
+pipeline{
+agent any
+stages{
+    stage('checkout')
+    {
+        steps{
+         checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
+         doGenerateSubmoduleConfigurations: false, extensions: [],
+         submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/wkhanvisualpathit/VProfile.git']]])  
+        }
+    }
+    stage('maven')
+    {
+       steps{withMaven(maven: 'maven') {
+         sh 'mvn install'
+    }
+        }
+        }    
+    stage("Docker build")
+    {
+       steps {
+         sh "docker build -t nikhilnidhi/calculator_1 ."
+     }
+     }
+stage("Docker push") {
+     steps {
+   sh "docker login -u username -p password"
+sh "docker push nikhilnidhi/calculator_1"
+     }
+}
+}
+}
