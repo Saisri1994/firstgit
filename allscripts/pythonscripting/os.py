@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 exitcode=os.system("cat /etc/redhat_release")
+#os.system("C:\Windows\System32\cmd.exe /c z:\Scripts\myscript.bat")
 if exitcode == 0 :
   print ("sys is redhat")
   packlist=['httpd','mysql']
